@@ -1,0 +1,631 @@
+:root {
+    --color-pink-light: #fff0f5;
+    /* Lavender blush / very light pink */
+    --color-pink-med: #ffccd5;
+    --color-pink-deep: #ff8fa3;
+    --color-peach-light: #ffe5d9;
+    /* New Peach */
+    --color-peach-med: #ffcbb6;
+    /* New Peach */
+    --color-red-romantic: #d6336c;
+    /* More vibrant pink-red */
+    --color-cream: #fffdf7;
+    --color-text: #590d22;
+
+    --font-serif: 'Playfair Display', serif;
+    --font-script: 'Dancing Script', cursive;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--color-pink-light);
+    /* Fallback */
+    color: var(--color-text);
+    font-family: var(--font-serif);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- UTILS --- */
+.hidden-section {
+    display: none !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.active-section {
+    display: flex;
+    animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* --- ENVELOPE SECTION --- */
+#intro-section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    overflow: visible;
+}
+
+.envelope-container {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.envelope-container:hover {
+    transform: scale(1.05);
+}
+
+.envelope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #ffb7b2;
+    /* Base color, though covered by pseudo-elements mostly */
+    transform-style: preserve-3d;
+}
+
+.heart-seal {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    z-index: 6;
+    /* On top of flap */
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.envelope.open .heart-seal {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+}
+
+/* The Flap */
+.envelope .flap {
+    position: absolute;
+    top: 0;
+    transform: rotateX(180deg);
+    z-index: 1;
+    /* Go behind letter */
+}
+
+/* The Body (Bottom part visually) */
+/* Actually, to make the letter come OUT, we need layers. */
+/* Back of envelope */
+/* The Body (Bottom part visually) */
+.envelope::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffb7b2;
+    /* Lighter pink body */
+    z-index: 1;
+}
+
+/* Front folds (Left/Right/Bottom) */
+.envelope::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-left: 150px solid #ff9e9e;
+    /* Slightly darker sides */
+    border-right: 150px solid #ff9e9e;
+    border-bottom: 100px solid #ffc8c8;
+    /* Lighter bottom triangle */
+    border-top: 100px solid transparent;
+    /* Opening */
+    z-index: 4;
+    pointer-events: none;
+}
+
+.envelope .flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 105px solid #ff8fa3;
+    /* Main flap color */
+    transform-origin: top;
+    transition: transform 0.6s ease 0.2s, z-index 0.2s 0.4s;
+    /* Delay z-index swap */
+    z-index: 5;
+}
+
+.envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+    /* Go behind letter */
+}
+
+.letter {
+    position: absolute;
+    bottom: 0;
+    width: 280px;
+    height: 180px;
+    background-color: white;
+    z-index: 2;
+    /* Inside envelope */
+    transition: transform 0.6s ease 0.4s;
+    /* Slide up delay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-script);
+    font-size: 1.5rem;
+    color: var(--color-text);
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.envelope.open .letter {
+    transform: translateY(-100px);
+    /* Just slide up a bit */
+    z-index: 2;
+}
+
+.click-instruction {
+    position: absolute;
+    bottom: -40px;
+    width: 100%;
+    text-align: center;
+    font-style: italic;
+    opacity: 0.7;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* --- SLIDES SECTION --- */
+#slides-section {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 240, 243, 0.85) 0%, rgba(255, 255, 255, 0.85) 100%);
+    /* Semi-transparent */
+}
+
+.slides-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    transform: scale(1.05);
+    /* Start slightly zoomed in */
+    pointer-events: none;
+}
+
+.slide.active-slide {
+    opacity: 1;
+    transform: scale(1);
+    /* Settle to normal */
+    pointer-events: auto;
+    z-index: 10;
+}
+
+h1 {
+    font-family: var(--font-script);
+    font-size: 4rem;
+    color: var(--color-red-romantic);
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 0px rgba(255, 200, 210, 0.5);
+}
+
+h2 {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    color: var(--color-text);
+    font-weight: 400;
+}
+
+p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+.sub-text {
+    font-size: 0.9rem;
+    opacity: 0.6;
+    margin-top: 2rem;
+}
+
+/* Photo Blending Logic / Gallery */
+.gallery-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    /* Adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+    perspective: 1000px;
+}
+
+.photo-card {
+    position: absolute;
+    /* Stack them */
+    width: 220px;
+    height: 300px;
+    background-color: white;
+    padding: 10px 10px 40px 10px;
+    box-shadow: 0 10px 30px rgba(89, 13, 34, 0.15);
+    border: 1px solid var(--color-peach-med);
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 0.5s;
+    overflow: hidden;
+}
+
+.photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    filter: sepia(0.2) contrast(1.1);
+}
+
+.photo-card::after {
+    content: '🎀';
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 1.2rem;
+}
+
+/* Stacking Logic - Fan Out */
+.card-1 {
+    transform: translateX(-180px) rotate(-10deg);
+    z-index: 1;
+}
+
+.card-2 {
+    transform: translateY(-20px) rotate(0deg);
+    z-index: 3;
+    width: 240px;
+    /* Center one bigger */
+    height: 330px;
+}
+
+.card-3 {
+    transform: translateX(180px) rotate(10deg);
+    z-index: 1;
+}
+
+/* Hover Effect - Spread More */
+.gallery-container:hover .card-1 {
+    transform: translateX(-220px) rotate(-15deg);
+}
+
+.gallery-container:hover .card-3 {
+    transform: translateX(220px) rotate(15deg);
+}
+
+/* New Caption Styles */
+.slide-caption h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+    text-shadow: none;
+    /* Cleaner look */
+}
+
+.slide-caption p {
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto;
+    color: var(--color-text);
+    opacity: 0.9;
+}
+
+/* Controls */
+.controls {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    gap: 1rem;
+    z-index: 20;
+}
+
+.nav-btn {
+    background: none;
+    border: 1px solid var(--color-pink-deep);
+    color: var(--color-pink-deep);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: var(--color-pink-deep);
+    color: white;
+}
+
+.coquette-btn {
+    margin-top: 2rem;
+    padding: 10px 30px;
+    background-color: var(--color-red-romantic);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(201, 24, 74, 0.3);
+    transition: transform 0.2s;
+}
+
+.coquette-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Sparkles currently empty, handled by JS injection usually */
+.sparkle {
+    position: absolute;
+    pointer-events: none;
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, #fff 0%, transparent 70%);
+    border-radius: 50%;
+    animation: fadeSparkle 1s linear forwards;
+}
+
+@keyframes fadeSparkle {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+/* Floating Hearts & Bows */
+.floating-element {
+    position: absolute;
+    pointer-events: none;
+    animation: floatUp 15s linear infinite;
+    opacity: 0.6;
+    z-index: 0;
+}
+
+.floating-heart {
+    color: var(--color-pink-deep);
+}
+
+.floating-bow {
+    font-size: 1.5rem;
+    filter: hue-rotate(320deg);
+    /* Adjust emoji color if needed */
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.8;
+    }
+
+    90% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* --- DATE PLAN SECTION --- */
+#date-plan-section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(255, 240, 243, 0.85) 0%, rgba(255, 255, 255, 0.85) 100%);
+}
+
+.date-ideas-container {
+    display: flex;
+    gap: 2rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.date-card {
+    background: white;
+    border: 2px solid var(--color-pink-deep);
+    border-radius: 15px;
+    padding: 2rem;
+    width: 200px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s;
+    cursor: pointer;
+    /* Clickable */
+}
+
+.date-card:hover {
+    transform: translateY(-5px);
+    background-color: #fff0f5;
+}
+
+.date-card h3 {
+    font-size: 1.2rem;
+    color: var(--color-red-romantic);
+    margin-bottom: 0.5rem;
+}
+
+.date-card.locked-card {
+    background-color: #fcfcfc;
+    border-color: var(--color-pink-med);
+    cursor: default;
+    /* Or pointer with a 'not-allowed' feel, but pointer is better for 'click for info' even if info is an alert */
+    cursor: help;
+}
+
+.date-card.locked-card:hover {
+    transform: translateY(-2px);
+    background-color: #fff;
+}
+
+/* --- DATE DETAILS (TIMELINE) --- */
+#date-details-section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* Allow scrolling */
+    align-items: center;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 230, 234, 0.9) 100%);
+    overflow-y: auto;
+    /* Scrollable */
+    padding: 4rem 1rem;
+}
+
+.timeline-container {
+    position: relative;
+    max-width: 600px;
+    width: 100%;
+    margin: 2rem 0;
+    padding-left: 20px;
+}
+
+/* The vertical line */
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    width: 4px;
+    background: var(--color-pink-med);
+    border-radius: 2px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 40px;
+}
+
+.timeline-item::before {
+    content: '❤️';
+    position: absolute;
+    left: 8px;
+    /* On the line */
+    top: 0;
+    font-size: 1.2rem;
+    background: white;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.time-marker {
+    font-weight: bold;
+    color: var(--color-pink-deep);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.event-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--color-peach-light);
+    transition: transform 0.2s;
+}
+
+.event-card:hover {
+    transform: scale(1.02);
+}
+
+.event-card h3 {
+    color: var(--color-red-romantic);
+    margin-bottom: 0.5rem;
+}
